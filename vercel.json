@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    { "source": "/Home.html", "destination": "/", "permanent": true },
+    { "source": "/home.html", "destination": "/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    }
+  ]
+}
