@@ -43,47 +43,52 @@
     </main>
 
     <script>
-        function loadPackages() {
-            const defaultPackages = [
-                { id: 'basic', name: 'Basic', price: '49', features: ['AI Chatbot', '500 Messages/mo', 'Email Support'] },
-                { id: 'premium', name: 'Premium', price: '149', features: ['Custom AI Models', 'Unlimited Messages', '24/7 Priority Support', 'Dedicated Manager'], popular: true },
-                { id: 'enterprise', name: 'Enterprise', price: '499', features: ['Full Automation', 'Custom Integrations', 'White-labeling'] }
-            ];
-
-            const savedPackages = JSON.parse(localStorage.getItem('flowvix_packages')) || defaultPackages;
-            const grid = document.getElementById('pricing-grid');
-            grid.innerHTML = '';
-
-            savedPackages.forEach(pkg => {
-                const card = document.createElement('div');
-                card.className = `bg-[#090e19] border ${pkg.popular ? 'border-primary' : 'border-outline-variant/20'} rounded-3xl p-8 flex flex-col relative overflow-hidden`;
+        async function loadPackages() {
+            try {
+                const response = await fetch('/api/packages');
+                const savedPackages = await response.json();
                 
-                if (pkg.popular) {
-                    card.innerHTML += `<div class="absolute top-4 right-[-30px] rotate-45 bg-primary text-white text-[10px] font-bold py-1 px-10">BEST VALUE</div>`;
+                const grid = document.getElementById('pricing-grid');
+                grid.innerHTML = '';
+
+                if (savedPackages.length === 0) {
+                    grid.innerHTML = '<p class="col-span-3 text-center text-on-surface-variant">No packages available yet. Please add them in the admin panel.</p>';
+                    return;
                 }
 
-                card.innerHTML += `
-                    <div class="mb-8">
-                        <h3 class="text-2xl font-bold mb-2">${pkg.name}</h3>
-                        <div class="flex items-baseline gap-1">
-                            <span class="text-4xl font-bold">$${pkg.price}</span>
-                            <span class="text-on-surface-variant">/mo</span>
+                savedPackages.forEach(pkg => {
+                    const card = document.createElement('div');
+                    card.className = `bg-[#090e19] border ${pkg.popular ? 'border-primary' : 'border-outline-variant/20'} rounded-3xl p-8 flex flex-col relative overflow-hidden`;
+                    
+                    if (pkg.popular) {
+                        card.innerHTML += `<div class="absolute top-4 right-[-30px] rotate-45 bg-primary text-white text-[10px] font-bold py-1 px-10">BEST VALUE</div>`;
+                    }
+
+                    card.innerHTML += `
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold mb-2">${pkg.name}</h3>
+                            <div class="flex items-baseline gap-1">
+                                <span class="text-4xl font-bold">$${pkg.price}</span>
+                                <span class="text-on-surface-variant">/mo</span>
+                            </div>
                         </div>
-                    </div>
-                    <ul class="space-y-4 mb-10 flex-grow">
-                        ${pkg.features.map(f => `
-                            <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
-                                <span class="text-on-surface-variant">${f}</span>
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <a href="mailto:contact@flowvix.com?subject=Inquiry for ${pkg.name} Package" class="w-full text-center ${pkg.popular ? 'signature-gradient' : 'bg-surface-container-highest border border-outline-variant/30'} text-white font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
-                        Get Started
-                    </a>
-                `;
-                grid.appendChild(card);
-            });
+                        <ul class="space-y-4 mb-10 flex-grow">
+                            ${pkg.features.map(f => `
+                                <li class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+                                    <span class="text-on-surface-variant">${f}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <a href="mailto:contact@flowvix.com?subject=Inquiry for ${pkg.name} Package" class="w-full text-center ${pkg.popular ? 'signature-gradient' : 'bg-surface-container-highest border border-outline-variant/30'} text-white font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
+                            Get Started
+                        </a>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading packages:', error);
+            }
         }
         loadPackages();
     </script>

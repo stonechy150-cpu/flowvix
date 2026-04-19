@@ -125,18 +125,28 @@
         const packageForm = document.getElementById('package-form');
         const pkgList = document.getElementById('pkg-list');
 
-        let packages = JSON.parse(localStorage.getItem('flowvix_packages')) || [];
+        let packages = [];
+
+        async function fetchPackages() {
+            try {
+                const response = await fetch('/api/packages');
+                packages = await response.json();
+                renderPackageList();
+            } catch (error) {
+                console.error('Error fetching packages:', error);
+            }
+        }
 
         function renderPackageList() {
             pkgList.innerHTML = '';
-            packages.forEach((pkg, index) => {
+            packages.forEach((pkg) => {
                 const div = document.createElement('div');
                 div.className = "p-6 bg-surface-container-highest border border-outline-variant/20 rounded-2xl relative group";
                 div.innerHTML = `
                     <div class="space-y-2">
                         <div class="flex justify-between items-start">
                             <h3 class="font-bold text-lg text-white">${pkg.name}</h3>
-                            <button onclick="removePackage(${index})" class="p-2 text-error/60 hover:text-error hover:bg-error/10 rounded-lg transition-all">
+                            <button onclick="removePackage('${pkg._id}')" class="p-2 text-error/60 hover:text-error hover:bg-error/10 rounded-lg transition-all">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                             </button>
                         </div>
@@ -152,34 +162,48 @@
             });
         }
 
-        window.removePackage = (index) => {
+        window.removePackage = async (id) => {
             if(confirm('Are you sure you want to delete this package?')) {
-                packages.splice(index, 1);
-                localStorage.setItem('flowvix_packages', JSON.stringify(packages));
-                renderPackageList();
+                try {
+                    const response = await fetch(`/api/packages?id=${id}`, { method: 'DELETE' });
+                    if (response.ok) {
+                        fetchPackages();
+                    }
+                } catch (error) {
+                    alert('Delete failed');
+                }
             }
         };
 
-        packageForm.addEventListener('submit', (e) => {
+        packageForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const newPkg = {
-                id: Date.now().toString(),
                 name: document.getElementById('pkg-name').value,
                 price: document.getElementById('pkg-price').value,
                 popular: document.getElementById('pkg-popular').checked,
                 features: document.getElementById('pkg-features').value.split('\n').filter(f => f.trim())
             };
-            packages.push(newPkg);
-            localStorage.setItem('flowvix_packages', JSON.stringify(packages));
-            packageForm.reset();
-            renderPackageList();
-            alert('Package added!');
+
+            try {
+                const response = await fetch('/api/packages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newPkg)
+                });
+                if (response.ok) {
+                    packageForm.reset();
+                    fetchPackages();
+                    alert('Package added!');
+                }
+            } catch (error) {
+                alert('Failed to save package');
+            }
         });
 
         // Check if already logged in (using sessionStorage for demo)
         if (sessionStorage.getItem('isAdmin') === 'true') {
             showAdmin();
-            renderPackageList();
+            fetchPackages();
         }
 
         loginForm.addEventListener('submit', (e) => {
