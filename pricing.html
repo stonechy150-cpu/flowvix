@@ -45,9 +45,9 @@
     <script>
         function loadPackages() {
             const defaultPackages = [
-                { id: 'basic', name: 'Basic', price: '49', features: ['AI Chatbot', '500 Messages/mo', 'Email Support'], stripePriceId: 'price_basic' },
-                { id: 'premium', name: 'Premium', price: '149', features: ['Custom AI Models', 'Unlimited Messages', '24/7 Priority Support', 'Dedicated Manager'], stripePriceId: 'price_premium', popular: true },
-                { id: 'enterprise', name: 'Enterprise', price: '499', features: ['Full Automation', 'Custom Integrations', 'White-labeling'], stripePriceId: 'price_enterprise' }
+                { id: 'basic', name: 'Basic', price: '49', features: ['AI Chatbot', '500 Messages/mo', 'Email Support'] },
+                { id: 'premium', name: 'Premium', price: '149', features: ['Custom AI Models', 'Unlimited Messages', '24/7 Priority Support', 'Dedicated Manager'], popular: true },
+                { id: 'enterprise', name: 'Enterprise', price: '499', features: ['Full Automation', 'Custom Integrations', 'White-labeling'] }
             ];
 
             const savedPackages = JSON.parse(localStorage.getItem('flowvix_packages')) || defaultPackages;
@@ -78,9 +78,9 @@
                             </li>
                         `).join('')}
                     </ul>
-                    <button onclick="handleCheckout('${pkg.stripePriceId}')" class="w-full ${pkg.popular ? 'signature-gradient' : 'bg-surface-container-highest border border-outline-variant/30'} text-white font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
+                    <a href="mailto:contact@flowvix.com?subject=Inquiry for ${pkg.name} Package" class="w-full text-center ${pkg.popular ? 'signature-gradient' : 'bg-surface-container-highest border border-outline-variant/30'} text-white font-bold py-4 rounded-xl transition-all hover:scale-[1.02]">
                         Get Started
-                    </button>
+                    </a>
                 `;
                 grid.appendChild(card);
             });
