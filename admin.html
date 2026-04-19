@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Flowvix</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="assets/js/config/tailwind.config.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/app.css">
+    <style>
+        .admin-gradient {
+            background: linear-gradient(135deg, #0084FF 0%, #00C2FF 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex items-center justify-center p-6">
+    <!-- Login Form -->
+    <div id="login-container" class="w-full max-w-md bg-[#090e19] border border-outline-variant/20 rounded-2xl shadow-2xl p-8 space-y-6">
+        <div class="text-center space-y-2">
+            <h1 class="text-3xl font-bold font-headline tracking-tighter text-[#e7eafb]">Admin Login</h1>
+            <p class="text-on-surface-variant font-body">Access the Flowvix Control Panel</p>
+        </div>
+        
+        <form id="login-form" class="space-y-4">
+            <div class="space-y-1">
+                <label for="username" class="text-sm font-medium text-[#a6abba]">Username</label>
+                <input type="text" id="username" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-on-surface">
+            </div>
+            <div class="space-y-1">
+                <label for="password" class="text-sm font-medium text-[#a6abba]">Password</label>
+                <input type="password" id="password" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 text-on-surface">
+            </div>
+            <div id="error-message" class="text-error text-sm hidden">Invalid username or password.</div>
+            <button type="submit" class="w-full admin-gradient text-white font-bold py-3 rounded-xl transition-transform active:scale-95 hover:shadow-[0_0_20px_rgba(0,132,255,0.4)]">
+                Login
+            </button>
+        </form>
+    </div>
+
+    <!-- Admin Panel (Initially Hidden) -->
+    <div id="admin-panel" class="hidden w-full max-w-6xl space-y-8">
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-bold font-headline tracking-tighter text-[#e7eafb]">Admin Dashboard</h1>
+            <button id="logout-btn" class="bg-surface-container-highest border border-outline-variant/20 px-6 py-2 rounded-xl text-on-surface hover:bg-outline-variant/10 transition-colors">
+                Logout
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Stats Cards -->
+            <div class="bg-[#090e19] border border-outline-variant/20 rounded-2xl p-6 space-y-2">
+                <p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Hits</p>
+                <p class="text-3xl font-bold text-primary">1,284</p>
+            </div>
+            <div class="bg-[#090e19] border border-outline-variant/20 rounded-2xl p-6 space-y-2">
+                <p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Active Services</p>
+                <p class="text-3xl font-bold text-primary">12</p>
+            </div>
+            <div class="bg-[#090e19] border border-outline-variant/20 rounded-2xl p-6 space-y-2">
+                <p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Inquiries</p>
+                <p class="text-3xl font-bold text-primary">45</p>
+            </div>
+        </div>
+
+        <div class="bg-[#090e19] border border-outline-variant/20 rounded-2xl p-8">
+            <h2 class="text-xl font-bold mb-6">Recent Activity</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+                    <div>
+                        <p class="font-medium">New project inquiry: AI Chatbot</p>
+                        <p class="text-sm text-on-surface-variant">2 hours ago</p>
+                    </div>
+                    <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs">New</span>
+                </div>
+                <div class="flex items-center justify-between py-3 border-b border-outline-variant/10">
+                    <div>
+                        <p class="font-medium">Updated Edge service documentation</p>
+                        <p class="text-sm text-on-surface-variant">5 hours ago</p>
+                    </div>
+                    <span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-xs">Update</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Package Manager -->
+        <div class="bg-[#090e19] border border-outline-variant/20 rounded-2xl p-8">
+            <h2 class="text-xl font-bold mb-6">Manage Service Packages</h2>
+            <form id="package-form" class="space-y-6 max-w-2xl">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-sm font-medium text-[#a6abba]">Package Name</label>
+                        <input type="text" id="pkg-name" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 text-white">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-sm font-medium text-[#a6abba]">Price ($)</label>
+                        <input type="number" id="pkg-price" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 text-white">
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-[#a6abba]">Stripe Price ID</label>
+                    <input type="text" id="pkg-stripe-id" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 text-white" placeholder="price_1P...">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-[#a6abba]">Features (One per line)</label>
+                    <textarea id="pkg-features" rows="4" required class="w-full bg-surface-container-highest border border-outline-variant/30 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/50 text-white"></textarea>
+                </div>
+                <button type="submit" class="admin-gradient text-white font-bold px-8 py-3 rounded-xl transition-all hover:shadow-[0_0_20px_rgba(0,132,255,0.4)]">
+                    Save Package
+                </button>
+            </form>
+            
+            <div id="pkg-list" class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Package Previews -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginContainer = document.getElementById('login-container');
+        const adminPanel = document.getElementById('admin-panel');
+        const errorMessage = document.getElementById('error-message');
+        const logoutBtn = document.getElementById('logout-btn');
+        const packageForm = document.getElementById('package-form');
+        const pkgList = document.getElementById('pkg-list');
+
+        let packages = JSON.parse(localStorage.getItem('flowvix_packages')) || [];
+
+        function renderPackageList() {
+            pkgList.innerHTML = '';
+            packages.forEach((pkg, index) => {
+                const div = document.createElement('div');
+                div.className = "p-4 bg-surface-container-highest border border-outline-variant/20 rounded-xl space-y-2";
+                div.innerHTML = `
+                    <p class="font-bold flex justify-between">
+                        ${pkg.name} ($${pkg.price})
+                        <button onclick="removePackage(${index})" class="text-error text-xs">Remove</button>
+                    </p>
+                    <p class="text-xs text-on-surface-variant truncate">${pkg.stripePriceId}</p>
+                `;
+                pkgList.appendChild(div);
+            });
+        }
+
+        window.removePackage = (index) => {
+            packages.splice(index, 1);
+            localStorage.setItem('flowvix_packages', JSON.stringify(packages));
+            renderPackageList();
+        };
+
+        packageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newPkg = {
+                id: Date.now().toString(),
+                name: document.getElementById('pkg-name').value,
+                price: document.getElementById('pkg-price').value,
+                stripePriceId: document.getElementById('pkg-stripe-id').value,
+                features: document.getElementById('pkg-features').value.split('\n').filter(f => f.trim())
+            };
+            packages.push(newPkg);
+            localStorage.setItem('flowvix_packages', JSON.stringify(packages));
+            packageForm.reset();
+            renderPackageList();
+            alert('Package added! Refresh the Pricing page to see changes.');
+        });
+
+        // Check if already logged in (using sessionStorage for demo)
+        if (sessionStorage.getItem('isAdmin') === 'true') {
+            showAdmin();
+            renderPackageList();
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            // Simple validation as requested
+            if (user === 'Jabir' && pass === 'Flowvix2020') {
+                sessionStorage.setItem('isAdmin', 'true');
+                showAdmin();
+                renderPackageList();
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('isAdmin');
+            location.reload();
+        });
+
+        function showAdmin() {
+            loginContainer.classList.add('hidden');
+            adminPanel.classList.remove('hidden');
+            document.body.classList.remove('flex', 'items-center', 'justify-center');
+            document.body.classList.add('block', 'p-12');
+        }
+    </script>
+</body>
+</html>
