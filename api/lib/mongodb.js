@@ -11,10 +11,8 @@ async function connectToDatabase() {
     return { client: cachedClient, db: cachedDb };
   }
 
-  const client = await MongoClient.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  // Removed deprecated options for Node.js 4.0+ driver compatibility
+  const client = await MongoClient.connect(MONGODB_URI);
 
   const db = await client.db(MONGODB_DB);
 
