@@ -30,6 +30,26 @@ module.exports = async (req, res) => {
       return res.status(201).json(result);
     }
 
+    else if (req.method === 'PUT') {
+      const { id } = req.query;
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      const { name, price, popular, features } = body;
+
+      const result = await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { 
+          $set: { 
+            name, 
+            price, 
+            popular: !!popular, 
+            features: Array.isArray(features) ? features : [],
+            updatedAt: new Date() 
+          } 
+        }
+      );
+      return res.status(200).json(result);
+    }
+
     else if (req.method === 'DELETE') {
       const { id } = req.query;
       await collection.deleteOne({ _id: new ObjectId(id) });
