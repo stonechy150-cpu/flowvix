@@ -3,6 +3,9 @@ const { ObjectId } = require('mongodb');
 
 module.exports = async (req, res) => {
   try {
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI environment variable is not defined');
+    }
     const { db } = await connectToDatabase();
     const collection = db.collection('packages');
 
