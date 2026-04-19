@@ -9,13 +9,17 @@ module.exports = async (req, res) => {
     const { db } = await connectToDatabase();
     const collection = db.collection('packages');
 
+    console.log('Method:', req.method);
+
     if (req.method === 'GET') {
       const packages = await collection.find({}).sort({ createdAt: -1 }).toArray();
       return res.status(200).json(packages);
     } 
     
     else if (req.method === 'POST') {
-      const { name, price, popular, features } = req.body;
+      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+      const { name, price, popular, features } = body;
+      
       const result = await collection.insertOne({
         name,
         price,
